@@ -22,15 +22,12 @@ public class Reader {
 	            int countLine=0;
 
 	            while(sc.hasNextLine()){
-	                String line = sc.nextLine();
-	                //System.out.println(line.length());
+	                String line = sc.nextLine();	                
 	                String[] arr = line.split(",");
 	                
-	                if(arr.length == 3){
-	                	//System.out.println(arr[0]+" "+arr[1]+" "+arr[2]);
+	                if(arr.length == 3){	                	
 	                	group.add(arr[0]);
-	                	id.add(arr[1]);
-	                	//System.out.println(arr[2]);
+	                	id.add(arr[1]);	                	
 	                	name.add(arr[2]);
 	                	countLine++;
 	                }
