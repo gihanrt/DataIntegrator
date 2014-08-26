@@ -42,12 +42,12 @@ public class Edge {
 	}
 	
 	
-	@SuppressWarnings("unused")
-	public void EdgeReader(String path){
+
+	public void EdgeReader(String path,String writerPath){
 			
 		try{
 			
-			File file = new File("C://Users/Hunter/Desktop/R-d3/edgeset.csv");
+			File file = new File(writerPath);
 	        BufferedWriter output = new BufferedWriter(new FileWriter(file));
 	        output.write("\"source\",\"target\"\n");
 	              	
@@ -92,6 +92,7 @@ public class Edge {
             
             sc.close();
             output.close();
+            System.out.println("number of counted line : "+countLine);
                        
 		}catch(Exception e){
 			e.printStackTrace();
