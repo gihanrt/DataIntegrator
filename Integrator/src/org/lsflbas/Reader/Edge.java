@@ -47,7 +47,7 @@ public class Edge {
 			
 		try{
 			
-			File file = new File("C://Users/Hunter/IdeaProjects/d3js/edgeset.csv");
+			File file = new File("C://Users/Hunter/Desktop/R-d3/edgeset.csv");
 	        BufferedWriter output = new BufferedWriter(new FileWriter(file));
 	        output.write("\"source\",\"target\"\n");
 	              	
@@ -60,9 +60,11 @@ public class Edge {
                 //System.out.println(line);
                 
                 String[] arr = line.split(",");
-                if(arr.length == 3){
+                
+                                
+                if(arr.length == 4 && arr[3].equals("TRUE")){
                 	
-                	System.out.println("original line -> "+line);
+                	//System.out.println("original line -> "+line);
                 	
                 	String[] sub=arr[1].split("[.]");
                 	String[] sub2=arr[2].split("[.]");
@@ -104,11 +106,11 @@ public class Edge {
 				
 		 		if( dataset[i][1].equals(check) && group.equals("bond") && "1".equals(dataset[i][0])){
 		 			//bond 
-		 			founder =Integer.toString(i+1);
+		 			founder =Integer.toString(i);
 		 			break;
 		 		}else if(dataset[i][1].equals(check) && group.equals("equity") && "2".equals(dataset[i][0])){
 		 			//equity
-		 			founder= Integer.toString(i+1);
+		 			founder= Integer.toString(i);
 		 			break;
 		 		}
 				
