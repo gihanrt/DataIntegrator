@@ -1,8 +1,8 @@
 package org.lsflbas.Reader;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
@@ -52,17 +52,16 @@ public class Edge {
 
 	public void EdgeReader(String yearly,String quartely,String writepath) throws IOException{
 		
-		
 		File fileYear=new File(yearly);
 		File fileQuarter = new File(quartely);
-		File writefile= new File(writepath);
 		
+		File checker=new File(writepath);
+		BufferedWriter read=new BufferedWriter(new FileWriter(checker));
+	
 		Scanner sc = new Scanner(fileYear);
 		Scanner sc2 =new Scanner(fileQuarter);
-	
-		BufferedWriter output = new BufferedWriter(new FileWriter(writefile));
 		
-        output.write("\"source\",\"target\",\"type\"\n");
+        read.write("\"source\",\"target\",\"type\",\"Q1\",\"Q2\",\"Q3\",\"Q4\"\n");
 		
 		Vector<String> v1=new Vector<String>();
 		//Vector<String> v2=new Vector<String>();
@@ -110,10 +109,14 @@ public class Edge {
 				if(spliter[1].equals(yearlyArry[i][0]) && spliter[2].equals(yearlyArry[i][1])){
 					QuartelyArray[i][0] = spliter[1];
 					QuartelyArray[i][1] = spliter[2];
-					QuartelyArray[i][2] = spliter[3];
-					QuartelyArray[i][3] = spliter[4];
-					QuartelyArray[i][4] = spliter[5];
-					QuartelyArray[i][5] = spliter[6];
+					for (int j = 2; j < 6; j++) {
+						if(spliter[j+1].equals("\"TRUE/FALSE\"") || spliter[j+1].equals("\"TRUE\"")){
+							QuartelyArray[i][j] = "TRUE";
+						}else if(spliter[j+1].equals("\"FALSE\"")){
+							QuartelyArray[i][j] = "FALSE";
+						}
+					}
+
 				}
 			}
         }
@@ -150,111 +153,64 @@ public class Edge {
         	
         	String z=findId(y,p);
         	String z1=findId(y1,p1);
+
+        	/*read.write(i+" original "+yearlyArry[i][0]+" "+yearlyArry[i][1]+" "+yearlyArry[i][2]+"\n");
+        	read.write(i+" Quarter  "+QuartelyArray[i][0]+" "+QuartelyArray[i][1]+"--->");
+        	read.write(z+","+z1+"\n");*/
         	
-			if(QuartelyArray[i][0] != null && QuartelyArray[i][0] != null){
-				
-				
-				
-				//String[] subOfQuartely1=QuartelyArray[i][0].split("[.]");
-				//String[] subOfQuartely2=QuartelyArray[i][1].split("[.]");
-		
-            	
-            	System.out.println("original  " + yearlyArry[i][0]+" "+ yearlyArry[i][1]+ " "+ yearlyArry[i][2]);
-            	System.out.println("location      -> "+x+" "+p+" "+y+" "+z+" "+x1+" "+" "+p1+" "+y1+" "+z1);  
-            	
+			if(QuartelyArray[i][0] != null && QuartelyArray[i][1] != null){
             	int countTrue=0,countSustain=0,countFalse=0;
             	for (int j = 2; j < 6; j++) {
             		
-					if (QuartelyArray[i][j].equals("\"TRUE\"")) {
-						if(j < 5 && QuartelyArray[i][j+1].equals("\"TRUE\"")){
+					if (QuartelyArray[i][j].equals("TRUE")) {
+						if(j < 5 && QuartelyArray[i][j+1].equals("TRUE")){
 							countSustain++;
 						}else{
 							countTrue++;
 						}
-					}else if(QuartelyArray[i][j].equals("\"FALSE\"")){
-						countFalse++;
+					}else if(QuartelyArray[i][j].equals("FALSE")){
+							countFalse++;
 					}
 				}
-            	
-            	System.out.println("episodic"+countTrue+" sustained "+countSustain+" weak"+countFalse);
-            	
+
             	if(countTrue > 0 && countSustain > 0){
-            		//goto sustain
-            		//output.write(yearlyArry[i][0]+","+yearlyArry[i][1]+","+"sustained"+"\n");
-            		output.write(z+","+z1+","+"sustained"+"\n");
+            		read.write(z+","+z1+",sustained,");
             	}else if(countTrue > 0 && countSustain == 0){
-            		//goto episodic
-            		output.write(z+","+z1+","+"episodic"+"\n");
+            		read.write(z+","+z1+",episodic,");
             	}else if(countFalse == 4){
-            		//goto weak
-            		output.write(z+","+z1+","+"weak"+"\n");
+            		read.write(z+","+z1+",weak,");
             	}
             	
-            	//output.write(z+","+z1+"\n");
-            	//output.write(yearlyArry[i][0]+","+yearlyArry[i][1]+"\n");
-            	
-				
+            	for (int j = 2; j < 6; j++) {
+            		
+            		if( j == 5){
+            			if(QuartelyArray[i][j].equals("TRUE")){
+            				read.write("1\n");
+                    	}else if(QuartelyArray[i][j].equals("FALSE")) {
+                    		read.write("0\n");
+                    	}
+            		}else{
+            			if(QuartelyArray[i][j].equals("TRUE")){
+            				read.write("1,");
+                    	}else if(QuartelyArray[i][j].equals("FALSE")) {
+                    		read.write("0,");
+                    	}
+            		}
+				}
+	
 				unnul++;
 			}else{				
-				//System.out.println("null are "+ yearlyArry[i][0]+ " "+ yearlyArry[i][1]);
-				output.write(z+","+z1+","+"weak"+"\n");
+				//read.write(i+" original "+yearlyArry[i][0]+" "+yearlyArry[i][1]+" "+yearlyArry[i][2]+"\n");
+	        	//read.write(i+" Quarter  "+QuartelyArray[i][0]+" "+QuartelyArray[i][1]+"--->");
+	        	read.write(z+","+z1+",weak,0,0,0,0\n");
+				
 				nuldata++;
 			}
 		}
         
-        System.out.println("nuldata"+nuldata+"  unnul data"+unnul);
-        output.close();
+        System.out.println(QuartelyArray.length+" "+yearlyArry.length);
+        read.close();
     
-		/*try{
-			
-			//File file = new File(writerPath);
-	        BufferedWriter output = new BufferedWriter(new FileWriter(file));
-	        output.write("\"source\",\"target\"\n");
-	              	
-	    	File f = new File(path);
-            Scanner sc = new Scanner(f);
-            int countLine=0;
-
-            */
-            
-           /* 
-            while(sc.hasNextLine()){
-                String line = sc.nextLine();
-                //System.out.println(line);                
-                String[] arr = line.split(",");    // "4" "bond.21" "bond.12" "TRUE"                                          
-                if(arr.length == 4 && arr[3].equals("TRUE")){
-                	
-                	//System.out.println("original line -> "+line);
-                	
-                	String[] sub=arr[1].split("[.]");    // "bond 21"
-                	String[] sub2=arr[2].split("[.]");   // "bond 12"
-                		
-                	String x="\""+sub[1]; 	// "21"
-                	String x1="\""+sub2[1]; // "12"
-                	
-                	String y=findCorrect(x);
-                	String y1=findCorrect(x1);
-                	
-                	String p=findWord(sub[0]); "bond
-                	String p1=findWord(sub2[0]);  "bond
-                	
-                	String z=findId(y,p);
-                	String z1=findId(y1,p1);
-                	
-                	//System.out.println("location      -> "+x+" "+p+" "+y+" "+z+" "+x1+" "+" "+p1+" "+y1+" "+z1);                	
-                	System.out.println(z+","+z1);
-                	output.write(z+","+z1+"\n");
-                	countLine++;
-                }     
-            }
-            
-            sc.close();
-            output.close();
-            System.out.println("number of counted line : "+countLine);
-                       
-		}catch(Exception e){
-			e.printStackTrace();
-		}		*/
 	}
 
 	public String findId(String check,String group){

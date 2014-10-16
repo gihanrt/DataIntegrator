@@ -13,7 +13,7 @@ public class Reader {
 		 	
 		 	String yearly="C://Users/lsf-admin/Desktop/R-Code/Yealy Granger Causality/edges/edge."+year+".csv";
 		 	String quartely="C://Users/lsf-admin/Desktop/R-Code/Quately Granger Causality/Qedges/Q."+year+".csv";
-		 	String writepath="C://Users/lsf-admin/Desktop/R-Code/jprg/edgeset."+year+".csv";
+		 	String writepath="C://Users/lsf-admin/Desktop/R-Code/jprg/V2/edgesNew."+year+".csv";
 		 			
 		 	Edge e=new Edge();
 		 	e.Nodes(filepath);
